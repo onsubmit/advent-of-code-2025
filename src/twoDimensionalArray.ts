@@ -1,5 +1,5 @@
 import { countArrayBy } from './arrayMethods';
-import { Coordinate } from './coordinate';
+import { Coordinate, directions } from './coordinate';
 import { inputTo2dArray } from './inputHelper';
 
 export class TwoDimensionalArray<T> {
@@ -40,6 +40,19 @@ export class TwoDimensionalArray<T> {
     }
 
     this._array[coordinate.row][coordinate.column] = value;
+  };
+
+  getBorderAt = (coordinate: Coordinate): Array<{ item: T; coordinate: Coordinate }> => {
+    const border: Array<{ item: T; coordinate: Coordinate }> = [];
+    for (const direction of directions) {
+      const newCoordinate = coordinate.move(direction);
+      const item = this.atCoordinate(newCoordinate);
+      if (item) {
+        border.push({ item, coordinate: newCoordinate });
+      }
+    }
+
+    return border;
   };
 
   forEach = (fn: (item: T, row: number, column: number) => void): void => {
