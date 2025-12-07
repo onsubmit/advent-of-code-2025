@@ -8,12 +8,24 @@ export class TwoDimensionalArray<T> {
   constructor(
     input: string,
     mapper?: (character: string, row: number, column: number) => T,
-    options: Partial<{ columnSplitter: string; retainEmptyLines: boolean }> = {
+    options: Partial<{ columnSplitter: string | RegExp; retainEmptyLines: boolean }> = {
       columnSplitter: '',
       retainEmptyLines: false,
     }
   ) {
     this._array = mapper ? inputTo2dArray(input, mapper, options) : [];
+  }
+
+  get numRows(): number {
+    return this._array.length;
+  }
+
+  get numColumns(): number {
+    return this._array.at(0)?.length ?? 0;
+  }
+
+  rowAt(row: number): Array<T> | undefined {
+    return this._array.at(row);
   }
 
   clone = (): TwoDimensionalArray<T> => {

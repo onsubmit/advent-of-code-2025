@@ -12,7 +12,7 @@ const splitLines = memoizee(
 export const inputTo2dArray = <T, TValue extends string = string>(
   input: string,
   mapper: (character: TValue, row: number, column: number) => T,
-  options: Partial<{ columnSplitter: string; retainEmptyLines: boolean }> = {
+  options: Partial<{ columnSplitter: string | RegExp; retainEmptyLines: boolean }> = {
     columnSplitter: '',
     retainEmptyLines: false,
   }
@@ -22,5 +22,6 @@ export const inputTo2dArray = <T, TValue extends string = string>(
     line
       .split(options?.columnSplitter ?? '')
       .map<T>((character, column) => mapper(character as TValue, row, column))
+      .filter((x) => x !== undefined)
   );
 };
